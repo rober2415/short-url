@@ -1,0 +1,12 @@
+footer {
+    background-color: var(--bs-primary);
+    color: var(--bs-secondary);
+}
+
+footer a {
+    color: var(--bs-secondary);
+}
+
+.shadow-top {
+  box-shadow: 0 -0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}

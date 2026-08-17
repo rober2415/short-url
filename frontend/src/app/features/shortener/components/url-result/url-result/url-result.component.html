@@ -1,0 +1,30 @@
+<ng-container *ngIf="resultUrl">
+    <div class="card shadow-sm border-0 border-start border-4 border-success p-3">
+        <div class="card-body p-0">
+            <div class="row align-items-center g-3">
+
+                <div class="col-12 col-md-6 text-truncate">
+                    <small class="text-uppercase fw-bold d-block mb-1 fs-7">Enlace
+                        original</small>
+                    <span class="text-truncate d-block" [title]="resultUrl.original_url">
+                        {{ resultUrl.original_url }}
+                    </span>
+                </div>
+
+                <div
+                    class="col-12 col-md-6 d-flex align-items-center justify-content-md-end gap-3 border-md-0 pt-2 pt-md-0">
+                    <div class="text-md-end text-truncate">
+                        <small class="text-uppercase text-muted fw-bold d-block mb-1 fs-7">Enlace
+                            corto</small>
+                        <a [href]="shortUrl" target="_blank"
+                            class="fw-bold text-primary text-decoration-none text-truncate d-block">
+                            {{ shortUrl }}
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</ng-container>

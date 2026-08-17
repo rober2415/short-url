@@ -1,0 +1,21 @@
+nav .logo {
+    height: 40px;
+    width: 60px;
+    color: var(--bs-secondary);
+}
+
+nav a {
+    color: var(--bs-secondary);
+}
+
+nav .dropdown-toggle,
+nav .dropdown-toggle i,
+nav .dropdown-toggle:hover,
+nav .dropdown-toggle:focus,
+nav .dropdown-toggle.show {
+    color: var(--bs-secondary) !important;
+}
+
+nav .dropdown-toggle::after {
+    border-top-color: var(--bs-secondary) !important;
+}

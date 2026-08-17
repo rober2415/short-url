@@ -1,0 +1,57 @@
+:root,
+[data-theme="light"] {
+    --bs-primary: #ffffff;
+    --bs-secondary: #111827;
+    --bs-hover: #1b3975;
+    --bs-text: #111827;
+}
+
+[data-theme="dark"] {
+    --bs-primary: #111827;
+    --bs-secondary: #87bff8;
+    --bs-text: #e6e5e5;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bs-primary: #111827;
+        --bs-secondary: #f9fafb;
+        --bs-hover: #6C757D;
+    }
+}
+
+@font-face {
+    font-family: "Onest";
+    src: url("./assets/fonts/Onest-VariableFont_wght.ttf") format("truetype-variations");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Onest", system-ui, sans-serif;
+    background-color: var(--bs-primary);
+    color: var(--bs-secondary);
+}
+
+app-root {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+}
+
+main {
+    padding: 2em;
+    max-width: 1200px;
+    width: 100%;
+    justify-self: center;
+}
+
+p {
+    color: var(--bs-text);
+}

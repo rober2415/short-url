@@ -1,0 +1,19 @@
+<div class="card shadow-sm border-0 p-3 p-md-4 mb-4">
+    <form (ngSubmit)="onSubmit()">
+        <label for="url" class="form-label fw-semibold mb-2">
+            Paste the URL to be shortened
+        </label>
+        <div class="input-group input-group-lg">
+            <span class="input-group-text border-end-0">
+                <i class="bi bi-link-45deg fs-4"></i>
+            </span>
+            <input type="url" class="form-control border-start-0 ps-0" id="url" name="urlInput" [(ngModel)]="inputUrl"
+                placeholder="https://example.com/long-url" required />
+            <button class="btn btn-primary px-4 fw-medium d-flex align-items-center gap-2" type="submit"
+                [disabled]="!inputUrl?.trim()">
+                <span>Get URL</span>
+                <i class="bi bi-arrow-right-short fs-4"></i>
+            </button>
+        </div>
+    </form>
+</div>
