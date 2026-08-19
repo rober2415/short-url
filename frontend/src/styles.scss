@@ -4,14 +4,12 @@
     --bs-secondary: #111827;
     --bs-hover: #1b3975;
     --bs-text: #111827;
-    --nav-bg: #f8fafc;
 }
 
 [data-theme="dark"] {
     --bs-primary: #111827;
     --bs-secondary: #87bff8;
     --bs-text: #e6e5e5;
-    --nav-bg: #0f172ae6;
 }
 
 @media (prefers-color-scheme: dark) {
