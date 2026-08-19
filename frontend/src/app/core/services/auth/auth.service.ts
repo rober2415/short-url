@@ -73,10 +73,6 @@ export class AuthService {
   public refreshAuthState(): void {
     const isAuthenticated = this.hasToken();
     this.updateAuthState(isAuthenticated);
-
-    if (!isAuthenticated && this.router.url !== '/login') {
-      this.router.navigate(['/login']);
-    }
   }
 
   private updateAuthState(isAuthenticated: boolean): void {
