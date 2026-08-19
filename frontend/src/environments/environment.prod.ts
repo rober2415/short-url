@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://surlrca.vercel.app/api',
-  shortUrl: 'https://surlrca.vercel.app/'
+  apiUrl: 'https://api-surl.onrender.com/api',
+  shortUrl: 'https://api-surl.onrender.com/'
 };
