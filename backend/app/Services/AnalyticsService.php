@@ -15,7 +15,9 @@ class AnalyticsService
         }
 
         if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-            return preg_replace('/[0-9]+$/', '0', $ip);
+            $parts = explode('.', $ip);
+
+            return $parts[0] . '.' . $parts[1] . '.0.0';
         }
 
         if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
