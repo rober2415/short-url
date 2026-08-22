@@ -8,4 +8,4 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('sanctum:prune-expired')->dailyAt('03:00');
+Schedule::command('sanctum:prune-expired --hours=0')->dailyAt('03:00');
