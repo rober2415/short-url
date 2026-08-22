@@ -33,10 +33,10 @@ export class RegisterPageComponent {
       error: (error) => {
         this.isLoading = false;
         if (error.status === 409 || error.status === 422) {
-          this.errorMessage = 'Ya existe un usuario con ese correo.';
+          this.errorMessage = 'A user with that email address already exists.';
         } else {
           this.errorMessage =
-            'Ocurrió un error al registrarte. Inténtalo de nuevo.';
+            'An error occurred whilst you were registering. Please try again.';
         }
       },
     });
