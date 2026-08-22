@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Analytic } from '../../models/analytic.interface';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-analytics-table',
@@ -9,6 +10,8 @@ import { Analytic } from '../../models/analytic.interface';
 export class AnalyticsTableComponent implements OnChanges {
   @Input() resultAnalytics: Analytic[] = [];
   @Input() isLoading = false;
+
+  baseUrl = environment.shortUrl;
 
   itemsPerPage = 10;
   currentPage = 1;

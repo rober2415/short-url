@@ -25,13 +25,13 @@ class AuthController extends Controller
             'password' => $validated['password'],
         ]);
 
-        $deviceName = $request->input('device_name') ?? $request->userAgent() ?? 'Dispositivo Desconocido';
+        $deviceName = $request->input('device_name') ?? $request->userAgent() ?? 'Unknown device';
         $expiresAt = now()->addMinutes(30);
 
         $accessToken = $user->createToken($deviceName, ['*'], $expiresAt);
 
         return response()->json([
-            'message' => 'Usuario creado correctamente',
+            'message' => 'User succesfully created',
             'user' => $user,
             'token' => $accessToken->plainTextToken,
             'expires_at' => $expiresAt->toISOString(),
@@ -52,11 +52,11 @@ class AuthController extends Controller
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json([
-                'message' => 'Credenciales incorrectas',
+                'message' => 'Incorrect credentials',
             ], 401);
         }
 
-        $deviceName = $request->input('device_name') ?? $request->userAgent() ?? 'Dispositivo Desconocido';
+        $deviceName = $request->input('device_name') ?? $request->userAgent() ?? 'Unknown device';
         $expiresAt = now()->addMinutes(30);
 
         $accessToken = $user->createToken($deviceName, ['*'], $expiresAt);
@@ -80,7 +80,7 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'message' => 'Sesión cerrada',
+            'message' => 'Closed session',
         ], 200);
     }
 }

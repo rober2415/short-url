@@ -41,8 +41,8 @@
                             </td>
 
                             <td>
-                                <a *ngIf="analytic.url?.short_url" [href]="analytic.url?.original_url"
-                                    [title]="analytic.url?.original_url" target="_blank"
+                                <a *ngIf="analytic.url?.short_url" [href]="analytic.url?.short_url | shortUrl"
+                                    [title]="analytic.url?.short_url | shortUrl" target="_blank"
                                     class="badge bg-primary bg-opacity-10 text-primary text-decoration-none px-2 py-1 fw-semibold">
                                     <i class="bi bi-link-45deg me-1"></i>/{{ analytic.url?.short_url }}
                                 </a>
@@ -79,7 +79,7 @@
         </ng-template>
     </div>
 
-    <div *ngIf="isLoading && hasData"
+    <div *ngIf="!isLoading && hasData"
         class="card-footer bg-transparent border-0 py-3 px-4 d-flex justify-content-between align-items-center text-muted small">
         <span>Showing {{ startRecord }} to {{ endRecord }} of {{ totalRecords }} records</span>
 

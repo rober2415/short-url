@@ -41,12 +41,10 @@ class UserController extends Controller
     {
         $validatedData = $request->validate([
             'name'     => 'sometimes|required|string|max:255',
-            // Ignora el email del usuario actual para que no dé error de "email ya existe" al actualizar
             'email'    => ['sometimes', 'required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => 'nullable|string|min:8',
         ]);
 
-        // Si no se envía contraseña nueva, la quitamos del array para no sobreescribir con null
         if (empty($validatedData['password'])) {
             unset($validatedData['password']);
         }
@@ -63,6 +61,6 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return response()->json(['message' => 'Usuario eliminado correctamente'], 200);
+        return response()->json(['message' => 'User succesfully deleted'], 200);
     }
 }

@@ -58,7 +58,7 @@ class UrlController extends Controller
         $url = Url::find($id);
 
         if (!$url) {
-            return response()->json(['message' => 'URL no encontrada'], 404);
+            return response()->json(['message' => 'URL not found'], 404);
         }
 
         return response()->json($url, 200);
@@ -72,7 +72,7 @@ class UrlController extends Controller
         $url = Url::find($id);
 
         if (!$url) {
-            return response()->json(['message' => 'URL no encontrada'], 404);
+            return response()->json(['message' => 'URL not found'], 404);
         }
 
         $validatedData = $request->validate([
@@ -93,12 +93,12 @@ class UrlController extends Controller
         $url = Url::find($id);
 
         if (!$url) {
-            return response()->json(['message' => 'URL no encontrada'], 404);
+            return response()->json(['message' => 'URL not found'], 404);
         }
 
         $url->delete();
 
-        return response()->json(['message' => 'URL eliminada correctamente'], 200);
+        return response()->json(['message' => 'URL succesfully deleted'], 200);
     }
 
     /**

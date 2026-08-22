@@ -8,6 +8,31 @@ use Illuminate\Http\Request;
 
 class AnalyticsService
 {
+    private function anonymizeIp(?string $ip): string
+    {
+        if (blank($ip) || $ip === 'Unknown') {
+            return 'Unknown';
+        }
+
+        if (str_contains($ip, ',')) {
+            $ip = trim(explode(',', $ip)[0]);
+        }
+
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            return preg_replace('/[0-9]+$/', '0', $ip);
+        }
+
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+            $packed = @inet_pton($ip);
+            if ($packed === false) {
+                return 'Unknown';
+            }
+            return inet_ntop($packed & pack('A16', "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x00\x00\x00\x00\x00\x00\x00\x00"));
+        }
+
+        return 'Unknown';
+    }
+
     public function recordVisit(Request $request, Url $url): void
     {
         $userAgent = $request->header('User-Agent');
@@ -17,8 +42,12 @@ class AnalyticsService
                 ?: $request->header('X-Country-Code')
         );
 
+        $rawIp = $request->header('CF-Connecting-IP')
+            ?: $request->header('X-Forwarded-For')
+            ?: $request->ip();
+
         Analytic::create([
-            'ip_address' => $request->ip() ?? 'Uknown',
+            'ip_address' => $this->anonymizeIp($rawIp),
             'user_agent' => $userAgent,
             'referer' => $referer,
             'country' => $country,

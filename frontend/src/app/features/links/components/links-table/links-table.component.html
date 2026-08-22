@@ -32,14 +32,19 @@
                     <tbody>
                         <tr *ngFor="let link of paginatedLinks">
                             <td class="ps-4">
-                                <span class="text-truncate d-inline-block" style="max-width: 300px;" [title]="link.original_url">
+                                <span class="text-truncate d-inline-block" style="max-width: 300px;"
+                                    [title]="link.original_url">
                                     {{ link.original_url }}
                                 </span>
                             </td>
                             <td>
-                                <code class="bg-light px-2 py-1 rounded" style="cursor: pointer;">
+                                <a [href]="link.short_url | shortUrl"
+                                [title]="link.short_url | shortUrl" target="_blank"
+                                        class="badge bg-primary bg-opacity-10 text-primary text-decoration-none px-2 py-1 fw-semibold">
+                                        <i class="bi bi-link-45deg me-1"></i>
                                     {{ link.short_url }}
-                                </code>
+                                    
+                                </a>
                             </td>
                             <td>
                                 <span class="badge bg-success bg-opacity-10 text-success">
