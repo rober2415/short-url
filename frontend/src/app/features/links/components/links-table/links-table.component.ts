@@ -6,8 +6,8 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { LinksService } from '../../services/links.service';
 import { Link } from 'src/app/core/models/link.interface';
+import { ShortUrlPipe } from 'src/app/shared/pipes/short-url.pipe';
 
 @Component({
   selector: 'app-links-table',
@@ -25,6 +25,8 @@ export class LinksTableComponent implements OnChanges {
   paginatedLinks: Link[] = [];
   totalRecords = 0;
   totalPages = 0;
+
+  constructor(private shortUrlPipe: ShortUrlPipe) {}
 
   get hasData(): boolean {
     return this.links.length > 0;
@@ -77,7 +79,8 @@ export class LinksTableComponent implements OnChanges {
   }
 
   copyToClipboard(url: string): void {
-    navigator.clipboard.writeText(url).then(() => {});
+    const fullUrl = this.shortUrlPipe.transform(url);
+    navigator.clipboard.writeText(fullUrl).then(() => {});
   }
 
   onDelete(id?: number): void {

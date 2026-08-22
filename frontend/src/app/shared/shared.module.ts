@@ -7,5 +7,6 @@ import { ShortUrlPipe } from './pipes/short-url.pipe';
   declarations: [CleanUrlPipe, ShortUrlPipe],
   imports: [CommonModule],
   exports: [CleanUrlPipe, ShortUrlPipe],
+  providers: [CleanUrlPipe, ShortUrlPipe],
 })
 export class SharedModule {}
