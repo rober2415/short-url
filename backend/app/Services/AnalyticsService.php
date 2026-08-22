@@ -14,10 +14,6 @@ class AnalyticsService
             return 'Unknown';
         }
 
-        if (str_contains($ip, ',')) {
-            $ip = trim(explode(',', $ip)[0]);
-        }
-
         if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
             return preg_replace('/[0-9]+$/', '0', $ip);
         }
@@ -42,12 +38,8 @@ class AnalyticsService
                 ?: $request->header('X-Country-Code')
         );
 
-        $rawIp = $request->header('CF-Connecting-IP')
-            ?: $request->header('X-Forwarded-For')
-            ?: $request->ip();
-
         Analytic::create([
-            'ip_address' => $this->anonymizeIp($rawIp),
+            'ip_address' => $this->anonymizeIp($request->ip()),
             'user_agent' => $userAgent,
             'referer' => $referer,
             'country' => $country,
