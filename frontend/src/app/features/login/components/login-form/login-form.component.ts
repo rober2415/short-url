@@ -12,8 +12,8 @@ export class LoginFormComponent {
   @Output() loginSubmitted = new EventEmitter<AuthUser>();
 
   loginData: AuthUser = {
-    email: '',
-    password: '',
+    email: 'demo@example.com',
+    password: 'demoexample',
   };
 
   showPassword: boolean = false;
