@@ -110,7 +110,7 @@ class UrlController extends Controller
 
         $url->increment('click_count');
 
-        $this->analyticsService->recordVisit($request, $url);
+        $this->analyticsService->recordVisit($url);
 
         return redirect()->away($url->original_url);
     }
