@@ -19,6 +19,14 @@ class UserController extends Controller
         $users = User::all();
         return response()->json($users, 200);
     }
+
+    /**
+     * Display the authenticated user's profile.
+     */
+    public function profile(Request $request)
+    {
+        return response()->json($request->user(), 200);
+    }   
     /**
      * Display the authenticated user.
      */
