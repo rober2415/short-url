@@ -1,1 +1,7 @@
-<button class="btn btn-danger" (click)="deleteProfile.emit()">Delete account</button>
+<div class="card shadow-sm border p-3 p-md-4 mb-4 rounded-3 overflow-hidden">
+    <div class="d-flex flex-column gap-2">
+        <h5 class="fw-bold mb-0">Delete account</h5>
+        <p class="text-muted mb-0">Deleting your account will permanently remove all your data.</p>
+        <button class="btn btn-danger btn-sm align-self-start" (click)="deleteProfile.emit()">Delete account</button>
+    </div>
+</div>
