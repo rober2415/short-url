@@ -3,10 +3,9 @@
 namespace App\Policies;
 
 use Illuminate\Auth\Access\Response;
-use App\Models\Url;
 use App\Models\User;
 
-class UrlPolicy
+class UserPolicy
 {
     public function before(User $user, string $ability): ?bool
     {
@@ -21,15 +20,15 @@ class UrlPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('view-any-url');
+        return $user->hasPermissionTo('view-any-user');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Url $url): bool
+    public function view(User $user, User $model): bool
     {
-        return $user->id === $url->user_id || $user->hasPermissionTo('view-any-url');
+        return $user->id === $model->id || $user->hasPermissionTo('view-any-user');
     }
 
     /**
@@ -43,32 +42,32 @@ class UrlPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Url $url): bool
+    public function update(User $user, User $model): bool
     {
-        return $user->id === $url->user_id || $user->hasPermissionTo('update-any-url');
+        return $user->id === $model->id || $user->hasPermissionTo('update-any-user');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Url $url): bool
+    public function delete(User $user, User $model): bool
     {
-        return $user->id === $url->user_id || $user->hasPermissionTo('delete-any-url');
+        return $user->id === $model->id || $user->hasPermissionTo('delete-any-user');
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Url $url): bool
+    public function restore(User $user, User $model): bool
     {
-        return $user->hasPermissionTo('restore-any-url');
+        return $user->hasPermissionTo('restore-any-user');
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Url $url): bool
+    public function forceDelete(User $user, User $model): bool
     {
-        return $user->hasPermissionTo('force-delete-any-url');
+        return $user->hasPermissionTo('force-delete-any-user');
     }
 }

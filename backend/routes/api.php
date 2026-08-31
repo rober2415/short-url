@@ -19,10 +19,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/analytics', [AnalyticController::class, 'index']);
 
-    Route::get('/user', [UserController::class, 'show']);
-    Route::put('/user', [UserController::class, 'update']);
-    Route::patch('/user', [UserController::class, 'update']);
-    Route::delete('/user', [UserController::class, 'destroy']);
+    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users/{user}', [UserController::class, 'show']);
+    Route::put('/users/{user}', [UserController::class, 'update']);
+    Route::patch('/users/{user}', [UserController::class, 'update']);
+    Route::delete('/users/{user}', [UserController::class, 'destroy']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });

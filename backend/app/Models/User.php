@@ -16,6 +16,8 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
+    protected $guard_name = 'sanctum';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -55,8 +57,4 @@ class User extends Authenticatable
         return $this->hasMany(Url::class);
     }
 
-    public static function getDefaultGuardName(): string
-    {
-        return 'sanctum';
-    }
 }
