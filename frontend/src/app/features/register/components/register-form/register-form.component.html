@@ -1,0 +1,99 @@
+<div class="row justify-content-center">
+
+    <div class="card shadow-sm border p-3 p-md-4">
+        <div class="card-body">
+
+            <div class="text-center mb-4">
+                <div class="mb-2">
+                    <i class="bi bi-person-circle fs-1 text"></i>
+                </div>
+                <h3 class="fw-bold mb-1">Sign up</h3>
+                <p class="text-muted small">Create your account to manage your links</p>
+            </div>
+
+            <div class="alert alert-warning d-flex align-items-start gap-2 py-2 px-3 mb-2 small" role="alert">
+                <i class="bi bi-info-circle-fill"></i>
+                <div>
+                    <div class="d-flex align-items-center gap-2">
+                        <strong>Registration disabled</strong>
+                    </div>
+                    <div>
+                        This is a preview app. For data protection reasons, registration is disabled.
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3 mb-3 fs-7"
+                role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span>{{ errorMessage }}</span>
+            </div>
+
+            <form (ngSubmit)="onSubmit()">
+
+                <div class="mb-3">
+                    <label for="name" class="form-label fw-semibold mb-1">Name</label>
+                    <div class="input-group input-group-lg border rounded-3 p-0 overflow-hidden">
+                        <span class="input-group-text bg-transparent border-0 pe-2">
+                            <i class="bi bi-person text-muted"></i>
+                        </span>
+                        <input type="name" class="form-control border-0 bg-transparent fs-6 shadow-none" id="name" name="name"
+                            [(ngModel)]="registerData.name" placeholder="Name" [disabled]="isLoading" required />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label fw-semibold mb-1">E-mail</label>
+                    <div class="input-group input-group-lg border rounded-3 p-0 overflow-hidden">
+                        <span class="input-group-text bg-transparent border-0 pe-2">
+                            <i class="bi bi-envelope text-muted"></i>
+                        </span>
+                        <input type="email" class="form-control border-0 bg-transparent fs-6 shadow-none" id="email" name="email"
+                            [(ngModel)]="registerData.email" placeholder="Email" [disabled]="isLoading"
+                            required />
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="form-label fw-semibold mb-1">Password</label>
+                    <div class="input-group input-group-lg border rounded-3 p-0 overflow-hidden">
+                        <span class="input-group-text bg-transparent border-0 pe-2">
+                            <i class="bi bi-lock text-muted"></i>
+                        </span>
+                        <input [type]="showPassword ? 'text' : 'password'"
+                            class="form-control border-0 bg-transparent fs-6 shadow-none" id="password" name="password"
+                            [(ngModel)]="registerData.password" placeholder="Password" [disabled]="isLoading" required />
+                        <button type="button" class="btn border-0 bg-transparent text-muted px-3"
+                            (click)="toggleShowPassword()">
+                            <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="btn btn-primary w-100 py-2 fw-medium d-flex align-items-center justify-content-center gap-2"
+                    [disabled]="!registerData.email || !registerData.password || isLoading">
+
+                    <ng-container *ngIf="!isLoading">
+                        <span>Sign up</span>
+                        <i class="bi bi-arrow-right-short fs-4"></i>
+                    </ng-container>
+
+                    <ng-container *ngIf="isLoading">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span>Loading...</span>
+                    </ng-container>
+                </button>
+
+            </form>
+
+        </div>
+
+        <div class="card-footer bg-transparent border-0 text-center pt-3">
+            <p class="mb-0 text-muted small">
+                Do you have an account?
+                <a routerLink="/login" class="fw-bold text-decoration-none">Sign in</a>
+            </p>
+        </div>
+    </div>
+</div>

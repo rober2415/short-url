@@ -1,0 +1,32 @@
+nav .logo {
+    height: 40px;
+    width: 60px;
+    color: var(--theme-navbar-fg);
+}
+
+nav a {
+    color: var(--theme-navbar-fg);
+}
+
+nav .dropdown-toggle,
+nav .dropdown-toggle i,
+nav .dropdown-toggle:hover,
+nav .dropdown-toggle:focus,
+nav .dropdown-toggle.show {
+    color: var(--theme-navbar-fg) !important;
+}
+
+nav .dropdown-item:hover {
+    background-color: var(--theme-navbar-hover-bg);
+    color: var(--theme-navbar-hover-fg);
+}
+
+
+nav .dropdown-toggle::after {
+    border-top-color: var(--theme-navbar-fg) !important;
+}
+
+nav .offcanvas .btn-close {
+    --bs-btn-close-bg: var(--theme-navbar-close-icon-bg);
+    opacity: 1;
+}

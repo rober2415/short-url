@@ -1,0 +1,17 @@
+.modal-content {
+    color: var(--bs-body-color);
+}
+
+.btn-close {
+    --bs-btn-close-color: var(--bs-body-color);
+    --bs-btn-close-bg: var(--theme-modal-close-icon-bg);
+    opacity: 1;
+}
+
+.modal-header {
+  border-bottom-color: #1b2133;
+}
+
+.modal-footer {
+  border-top-color: #1b2133;
+}

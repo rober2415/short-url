@@ -1,0 +1,4 @@
+<h1>My Links</h1>
+<p>Manage and track all your shortened URLs</p>
+
+<app-links-table [links]="links" [isDeleting]="isDeleting" [isLoading]="isLoading" (deletedRequested)="deleteLink($event)"></app-links-table>

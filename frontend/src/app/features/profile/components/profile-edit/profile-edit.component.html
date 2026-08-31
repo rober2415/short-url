@@ -1,0 +1,30 @@
+<app-modal modalId="editProfileModal" title="Edit profile">
+    <form modal-body class="d-flex flex-column gap-2" *ngIf="profile" id="editProfileForm" (ngSubmit)="onSubmit()">
+        <label for="edit-name">Name</label>
+        <input type="text" name="name" id="edit-name" class="form-control input-group" [(ngModel)]="profile.name" required>
+    </form>
+    <ng-container modal-footer>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success" form="editProfileForm" data-bs-dismiss="modal">
+            Save changes
+        </button>
+    </ng-container>
+</app-modal>
+
+<app-modal modalId="editPasswordModal" title="Edit password">
+    <form modal-body class="d-flex flex-column gap-2" *ngIf="profile" id="editPasswordForm" (ngSubmit)="onSubmit()">
+        <label for="edit-old-password">Old Password</label>
+        <input type="password" name="oldPassword" id="edit-old-password" class="form-control input-group"
+            [(ngModel)]="profile.oldPassword" minlength="8" required>
+
+        <label for="edit-password">New Password</label>
+        <input type="password" name="password" id="edit-password" class="form-control input-group" [(ngModel)]="profile.password"
+            minlength="8" required>
+    </form>
+    <ng-container modal-footer>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success" form="editPasswordForm" data-bs-dismiss="modal">
+            Save changes
+        </button>
+    </ng-container>
+</app-modal>

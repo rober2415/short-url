@@ -1,0 +1,96 @@
+<div class="card border shadow-sm">
+    <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0">Your Links</h5>
+        <span class="badge text-muted border fw-normal">{{ totalRecords }} Links</span>
+    </div>
+
+    <div class="card-body p-0 mt-3">
+
+        <div *ngIf="isLoading; else contentBlock" class="text-center py-5">
+            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <ng-template #contentBlock>
+            <div *ngIf="!hasData" class="text-center py-5">
+                <i class="bi bi-link-45deg text-muted" style="font-size: 3rem;"></i>
+                <p class="text-muted mt-3">No links yet. Create your first shortened URL!</p>
+            </div>
+
+            <div *ngIf="hasData" class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="small border-top">
+                        <tr>
+                            <th class="ps-4">Original URL</th>
+                            <th>Short Code</th>
+                            <th>Clicks</th>
+                            <th>Created</th>
+                            <th class="pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let link of paginatedLinks">
+                            <td class="ps-4">
+                                <span class="text-truncate d-inline-block" style="max-width: 300px;"
+                                    [title]="link.original_url">
+                                    {{ link.original_url }}
+                                </span>
+                            </td>
+                            <td>
+                                <a [href]="link.short_url | shortUrl"
+                                [title]="link.short_url | shortUrl" target="_blank"
+                                        class="badge bg-primary text-decoration-none px-2 py-1 fw-semibold">
+                                        <i class="bi bi-link-45deg me-1"></i>
+                                    {{ link.short_url }}
+                                    
+                                </a>
+                            </td>
+                            <td>
+                                <span class="badge bg-success bg-opacity-10 text-success">
+                                    {{ link.click_count ?? 0 }}
+                                </span>
+                            </td>
+                            <td>
+                                <small>{{ link.created_at | date: 'dd/MM/yyyy' }}</small>
+                            </td>
+                            <td class="pe-4">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <button type="button" class="btn btn-outline-primary"
+                                        (click)="copyToClipboard(link.short_url)" title="Copy to clipboard"
+                                        [disabled]="isDeleting">
+                                        <i class="bi bi-clipboard"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger" (click)="onDelete(link.id)"
+                                        title="Delete link" [disabled]="isDeleting">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </ng-template>
+
+    </div>
+
+    <div *ngIf="!isLoading && hasData"
+        class="card-footer bg-transparent border-0 py-3 px-4 d-flex justify-content-between align-items-center text-muted small">
+        <span>Showing {{ startRecord }} to {{ endRecord }} of {{ totalRecords }} links</span>
+
+        <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn btn-outline-secondary" [disabled]="currentPage === 1"
+                (click)="previousPage()">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary" disabled>
+                {{ currentPage }} of {{ totalPages }}
+            </button>
+            <button type="button" class="btn btn-outline-secondary" [disabled]="currentPage === totalPages"
+                (click)="nextPage()">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+</div>

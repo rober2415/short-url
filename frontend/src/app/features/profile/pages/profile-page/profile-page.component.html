@@ -1,0 +1,6 @@
+<h1>My Profile</h1>
+<p>Manage your account information</p>
+
+<app-profile-detail [profile]="profile" [isLoading]="isLoading"></app-profile-detail>
+<app-profile-edit [profile]="profile" (updateProfile)="onUpdateProfile($event)"></app-profile-edit>
+<app-profile-delete (deleteProfile)="onDeleteProfile()"></app-profile-delete>
