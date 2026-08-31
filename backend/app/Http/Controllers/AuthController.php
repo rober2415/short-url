@@ -25,6 +25,8 @@ class AuthController extends Controller
             'password' => $validated['password'],
         ]);
 
+        $user->assignRole('user');
+
         $deviceName = $request->input('device_name') ?? $request->userAgent() ?? 'Unknown device';
 
         $accessToken = $user->createToken($deviceName, ['*']);

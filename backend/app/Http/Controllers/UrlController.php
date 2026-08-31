@@ -18,7 +18,11 @@ class UrlController extends Controller
      */
     public function index(Request $request)
     {
-        $urls = $request->user()->urls()->get();
+        if ($request->user()->hasPermissionTo('view-any-url')) {
+            $urls = Url::with('user')->get();
+        } else {
+            $urls = $request->user()->urls()->get();
+        }
         return response()->json($urls, 200);
     }
 
@@ -47,13 +51,9 @@ class UrlController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $id)
+    public function show(Url $url)
     {
-        $url = $request->user()->urls()->find($id);
-
-        if (!$url) {
-            return response()->json(['message' => 'URL not found'], 404);
-        }
+        $this->authorize('view', $url);
 
         return response()->json($url, 200);
     }
@@ -61,17 +61,13 @@ class UrlController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Url $url)
     {
-        $url = $request->user()->urls()->find($id);
-
-        if (!$url) {
-            return response()->json(['message' => 'URL not found'], 404);
-        }
+        $this->authorize('update', $url);
 
         $validatedData = $request->validate([
             'original_url' => 'sometimes|required|url',
-            'short_url'    => 'sometimes|required|string|unique:urls,short_url,' . $id,
+            'short_url'    => 'sometimes|required|string|unique:urls,short_url,' . $url->id,
         ]);
 
         $url->update($validatedData);
@@ -82,13 +78,9 @@ class UrlController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, string $id)
+    public function destroy(Request $request, Url $url)
     {
-        $url = $request->user()->urls()->find($id);
-
-        if (!$url) {
-            return response()->json(['message' => 'URL not found'], 404);
-        }
+        $this->authorize('delete', $url);
 
         $url->delete();
 
