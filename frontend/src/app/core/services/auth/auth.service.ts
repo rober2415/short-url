@@ -1,33 +1,31 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { AuthUser } from 'src/app/core/models/auth.interface';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+import { AuthUser, CurrentUser } from 'src/app/core/models/auth.interface';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = environment.apiUrl;
+  private readonly apiUrl = environment.apiUrl;
   private readonly sessionExpiredStorageKey = 'session_expired';
 
-  private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
-  public isLoggedIn$ = this.loggedIn.asObservable();
+  private currentUserSubject = new BehaviorSubject<CurrentUser | null>(this.getInitialUserFromStorage());
+  public readonly currentUser$ = this.currentUserSubject.asObservable();
+
+  public readonly isLoggedIn$: Observable<boolean> = this.currentUser$.pipe(map((user) => !!user && this.hasToken()));
+  public readonly isAdmin$: Observable<boolean> = this.currentUser$.pipe(map((user) => !!user?.roles?.includes('admin')));
 
   constructor(
     private httpClient: HttpClient,
     private router: Router,
   ) {
-    this.refreshAuthState();
-
-    window.addEventListener('storage', () => {
-      this.refreshAuthState();
-    });
-
-    window.addEventListener('focus', () => {
-      this.refreshAuthState();
-    });
+    if (this.isLoggedIn()) {
+      this.fetchUserProfile().subscribe();
+    }
   }
 
   getUserName(): string {
@@ -39,58 +37,117 @@ export class AuthService {
     return userIdStr ? parseInt(userIdStr, 10) : null;
   }
 
-  register(userData: AuthUser): Observable<any> {
-    return this.httpClient.post(`${this.apiUrl}/register`, userData);
-  }
-
-  login(credentials: AuthUser): Observable<any> {
-    return this.httpClient.post(`${this.apiUrl}/login`, credentials).pipe(
-      tap((response: any) => {
-        localStorage.setItem('auth_token', response.token);
-        localStorage.setItem('user_name', response.user?.name ?? '');
-        localStorage.setItem('user_id', response.user?.id?.toString() ?? '');
-
-        this.updateAuthState(true);
-        this.router.navigate(['/']);
-      }),
-    );
-  }
-
-  consumeSessionExpiredFlag(): boolean {
-    const isExpired = sessionStorage.getItem(this.sessionExpiredStorageKey) === '1';
-    if (isExpired) {
-      sessionStorage.removeItem(this.sessionExpiredStorageKey);
-    }
-
-    return isExpired;
-  }
-
-  logout(sessionExpired: boolean = false): void {
-    if (sessionExpired) {
-      sessionStorage.setItem(this.sessionExpiredStorageKey, '1');
-    }
-
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user_name');
-    localStorage.removeItem('user_id');
-    this.updateAuthState(false);
-    this.router.navigate(['/login']);
+  private hasToken(): boolean {
+    return !!localStorage.getItem('auth_token');
   }
 
   isLoggedIn(): boolean {
     return this.hasToken();
   }
 
-  private hasToken(): boolean {
-    return !!localStorage.getItem('auth_token');
+  private hasRole(role: string): boolean {
+    const roles: string[] = JSON.parse(
+      localStorage.getItem('user_roles') || '[]',
+    );
+    return roles.includes(role);
   }
 
-  public refreshAuthState(): void {
-    const isAuthenticated = this.hasToken();
-    this.updateAuthState(isAuthenticated);
+  isAdmin(): boolean {
+    return this.hasRole('admin') || this.hasRole('support');
   }
 
-  private updateAuthState(isAuthenticated: boolean): void {
-    this.loggedIn.next(isAuthenticated);
+  consumeSessionExpiredFlag(): boolean {
+    const isExpired =
+      sessionStorage.getItem(this.sessionExpiredStorageKey) === '1';
+    if (isExpired) {
+      sessionStorage.removeItem(this.sessionExpiredStorageKey);
+    }
+    return isExpired;
+  }
+
+  login(credentials: AuthUser): Observable<any> {
+    return this.httpClient.post<any>(`${this.apiUrl}/login`, credentials).pipe(
+      tap((response) => {
+        const user = this.formatUser(response.user);
+        this.setSession(response.token, user);
+        this.router.navigate(['/']);
+      }),
+    );
+  }
+
+  register(userData: AuthUser): Observable<any> {
+    return this.httpClient.post(`${this.apiUrl}/register`, userData);
+  }
+
+  fetchUserProfile(): Observable<CurrentUser | null> {
+    if (!this.isLoggedIn()) {
+      this.clearSession();
+      return of(null);
+    }
+
+    return this.httpClient.get<any>(`${this.apiUrl}/user`).pipe(
+      map((res) => this.formatUser(res?.user ?? res)),
+      tap((user) => this.updateUserSession(user)),
+      catchError((error) => {
+        if (error.status === 401) {
+          this.logout(true);
+        }
+        return of(null);
+      }),
+    );
+  }
+
+  logout(sessionExpired = false): void {
+    if (sessionExpired) {
+      sessionStorage.setItem(this.sessionExpiredStorageKey, '1');
+    }
+    this.clearSession();
+    this.router.navigate(['/login']);
+  }
+
+  private setSession(token: string, user: CurrentUser): void {
+    localStorage.setItem('auth_token', token);
+    this.updateUserSession(user);
+  }
+
+  private updateUserSession(user: CurrentUser): void {
+    localStorage.setItem('user_name', user.name);
+    localStorage.setItem('user_id', user.id.toString());
+    localStorage.setItem('user_roles', JSON.stringify(user.roles));
+    this.currentUserSubject.next(user);
+  }
+
+  private clearSession(): void {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_name');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('user_roles');
+    this.currentUserSubject.next(null);
+  }
+
+  private getInitialUserFromStorage(): CurrentUser | null {
+    if (!this.isLoggedIn()) return null;
+    try {
+      const storedRoles = localStorage.getItem('user_roles');
+      const roles = storedRoles ? JSON.parse(storedRoles) : [];
+      const id = localStorage.getItem('user_id');
+      const name = localStorage.getItem('user_name') || '';
+
+      return {
+        id: id ? parseInt(id, 10) : 0,
+        name,
+        roles: Array.isArray(roles) ? roles : [],
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  private formatUser(user: any): CurrentUser {
+    return {
+      id: user?.id ?? 0,
+      name: user?.name ?? '',
+      roles: Array.isArray(user?.roles) ? user.roles : [],
+    };
   }
 }

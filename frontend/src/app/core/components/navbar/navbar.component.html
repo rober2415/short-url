@@ -81,17 +81,27 @@
 
         <ul class="navbar-nav">
             <li class="nav-item dropdown" *ngIf="authService.isLoggedIn$ | async">
-                <a class="nav-link text-uppercase d-flex align-items-center text-reset" href="#" id="navbarDropdown" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link text-uppercase d-flex align-items-center text-reset" href="#" id="navbarDropdown"
+                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="profile-icon bi bi-person-circle"></i>
                 </a>
 
                 <ul class="dropdown-menu dropdown-menu-end text-uppercase border-0 shadow rounded-0 position-absolute">
+                    <ng-container *ngIf="authService.isAdmin$ | async">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2" routerLink="/settings">
+                                <i class="bi bi-gear"></i> Settings
+                            </a>
+
+                        </li>
+                    </ng-container>
+
                     <li>
                         <a class="dropdown-item d-flex align-items-center gap-2" routerLink="/profile">
                             <i class="bi bi-person"></i> Profile
                         </a>
                     </li>
+
                     <li>
                         <a class="dropdown-item d-flex align-items-center gap-2" href="#"
                             (click)="authService.logout()">

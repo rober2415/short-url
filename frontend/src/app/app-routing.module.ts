@@ -34,6 +34,11 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'settings',
+    loadChildren: () =>
+      import('./admin/admin.module').then((m) => m.AdminModule),
+  },
+  {
     path: 'profile',
     loadChildren: () =>
       import('./features/profile/profile.module').then((m) => m.ProfileModule),
