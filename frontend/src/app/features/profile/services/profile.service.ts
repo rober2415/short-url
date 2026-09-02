@@ -19,7 +19,7 @@ export class ProfileService {
     return this.http.put<Profile>(this.apiUrl, data);
   }
 
-  deleteUserProfile() {
-    return this.http.delete(`${this.apiUrl}`);
+  deleteUserProfile(): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}`);
   }
 }

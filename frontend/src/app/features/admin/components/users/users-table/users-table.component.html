@@ -1,0 +1,30 @@
+<div class="card border shadow-sm">
+    <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0">Your Users</h5>
+        <span class="badge text-muted border fw-normal">{{ users.length }} Users</span>
+    </div>
+
+    <div class="card-body p-0 mt-3">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="small border-top">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users">
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <button>Edit</button>
+                        <button>Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
