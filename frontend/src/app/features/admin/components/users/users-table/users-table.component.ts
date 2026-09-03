@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { UsersService } from '../../../services/users.service';
+import { User } from '../../../models/user.interface';
 
 @Component({
   selector: 'app-users-table',
@@ -7,7 +8,9 @@ import { UsersService } from '../../../services/users.service';
   styleUrls: ['./users-table.component.scss'],
 })
 export class UsersTableComponent implements OnInit {
-  public users: any[] = [];
+  users: User[] = [];
+  @Output() deletedUser = new EventEmitter<number>();
+  @Output() userSelected = new EventEmitter<User>();
 
   constructor(private usersService: UsersService) {}
 
@@ -24,5 +27,15 @@ export class UsersTableComponent implements OnInit {
         console.error('Error al cargar usuarios:', err);
       },
     });
+  }
+
+  onEdit(user: User): void {
+    this.userSelected.emit(user);
+  }
+
+  onDelete(userId: number): void {
+    if (userId) {
+      this.deletedUser.emit(userId);
+    }
   }
 }

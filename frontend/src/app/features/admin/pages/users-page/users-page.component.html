@@ -1,1 +1,2 @@
-<app-users-table></app-users-table>
+<app-users-table (deletedUser)="deleteUser($event)" (userSelected)="selectUser($event)"></app-users-table>
+<app-users-edit [user]="selectedUser" (userUpdated)="updateUser($event)"></app-users-edit>

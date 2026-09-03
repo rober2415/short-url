@@ -1,0 +1,14 @@
+<app-modal modalId="editUserModal" title="Edit user">
+    <form modal-body class="d-flex flex-column gap-2" *ngIf="user" id="editUserForm" (ngSubmit)="onSubmit()">
+        <label for="edit-name">Name</label>
+        <input type="text" name="name" id="edit-name" class="form-control input-group" [(ngModel)]="user.name" required>
+        <label for="edit-email">Email</label>
+        <input type="email" name="email" id="edit-email" class="form-control input-group" [(ngModel)]="user.email" required>
+    </form>
+    <ng-container modal-footer>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success" form="editUserForm" data-bs-dismiss="modal">
+            Save changes
+        </button>
+    </ng-container>
+</app-modal>

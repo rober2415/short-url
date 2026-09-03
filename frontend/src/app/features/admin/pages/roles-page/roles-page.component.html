@@ -1,1 +1,2 @@
-<app-roles-table></app-roles-table>
+<app-roles-table (deletedRole)="deleteRole($event)" (roleSelected)="selectRole($event)"></app-roles-table>
+<app-roles-edit [role]="selectedRole" (roleUpdated)="updateRole($event)"></app-roles-edit>

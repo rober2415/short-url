@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Gate;
+use Spatie\Permission\Models\Role;
+use App\Policies\RolePolicy;
 use Laravel\Sanctum\PersonalAccessToken;
 use Laravel\Sanctum\Sanctum;
 
@@ -20,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-    {
+    {      
         Sanctum::authenticateAccessTokensUsing(
             static function (PersonalAccessToken $accessToken, bool $isValid): bool {
                 if (! $isValid) {

@@ -9,10 +9,32 @@ import { RolesTableComponent } from './components/roles/roles-table/roles-table.
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.component';
 import { AdminLayoutComponent } from 'src/app/layout/admin-layout/admin-layout.component';
+import { RolesEditComponent } from './components/roles/roles-edit/roles-edit.component';
+import { UsersEditComponent } from './components/users/users-edit/users-edit.component';
+import { FormsModule } from '@angular/forms';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
-  declarations: [RolesPageComponent, UsersPageComponent, UsersTableComponent, RolesTableComponent, SidebarComponent, DashboardPageComponent, AdminLayoutComponent],
-  imports: [CommonModule, AdminRoutingModule],
-  exports: [RolesPageComponent, UsersPageComponent, UsersTableComponent, RolesTableComponent, SidebarComponent, DashboardPageComponent, AdminLayoutComponent],
+  declarations: [
+    RolesPageComponent,
+    UsersPageComponent,
+    UsersTableComponent,
+    RolesTableComponent,
+    SidebarComponent,
+    DashboardPageComponent,
+    AdminLayoutComponent,
+    RolesEditComponent,
+    UsersEditComponent,
+  ],
+  imports: [CommonModule, FormsModule, AdminRoutingModule, SharedModule],
+  exports: [
+    RolesPageComponent,
+    UsersPageComponent,
+    UsersTableComponent,
+    RolesTableComponent,
+    SidebarComponent,
+    DashboardPageComponent,
+    AdminLayoutComponent,
+  ],
 })
 export class AdminModule {}
