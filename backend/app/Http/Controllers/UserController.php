@@ -16,7 +16,7 @@ class UserController extends Controller
     public function index()
     {
         $this->authorize('viewAny', User::class);
-        $users = User::all();
+        $users = User::with('roles')->get();
         return response()->json($users, 200);
     }
 
@@ -50,10 +50,11 @@ class UserController extends Controller
         $this->authorize('update', $user);
 
         $validatedData = $request->validate([
-            'name'     => 'sometimes|required|string|max:255',
-            'email'    => ['sometimes', 'required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'name' => 'sometimes|required|string|max:255',
+            'email' => ['sometimes', 'required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => 'nullable|string|min:8',
             'oldPassword' => 'nullable|string',
+            'role' => 'sometimes|required|string|exists:roles,name',
         ]);
 
         if (!empty($validatedData['password'])) {
@@ -72,8 +73,10 @@ class UserController extends Controller
             unset($validatedData['password']);
         }
 
+        unset($validatedData['role']);
+
         $user->update($validatedData);
-        return response()->json($user->fresh(), 200);
+        return response()->json($user->fresh('roles'), 200);
     }
 
     /**

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { UsersService } from '../../../services/users.service';
+import { RolesService } from '../../../services/roles.service';
 import { User } from '../../../models/user.interface';
 
 @Component({
@@ -9,13 +10,18 @@ import { User } from '../../../models/user.interface';
 })
 export class UsersTableComponent implements OnInit {
   users: User[] = [];
+  roles: any[] = [];
   @Output() deletedUser = new EventEmitter<number>();
   @Output() userSelected = new EventEmitter<User>();
 
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private rolesService: RolesService,
+  ) {}
 
   ngOnInit(): void {
     this.loadUsers();
+    this.loadRoles();
   }
 
   private loadUsers(): void {
@@ -25,6 +31,17 @@ export class UsersTableComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al cargar usuarios:', err);
+      },
+    });
+  }
+
+  private loadRoles(): void {
+    this.rolesService.getRoles().subscribe({
+      next: (res: any) => {
+        this.roles = Array.isArray(res) ? res : (res?.data ?? []);
+      },
+      error: (err) => {
+        console.error('Error al cargar roles:', err);
       },
     });
   }

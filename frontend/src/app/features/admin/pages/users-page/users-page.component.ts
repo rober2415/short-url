@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../../services/users.service';
 import { User } from '../../models/user.interface';
+import { Role } from '../../models/role.interface';
+import { RolesService } from '../../services/roles.service';
 
 @Component({
   selector: 'app-users-page',
@@ -9,10 +11,19 @@ import { User } from '../../models/user.interface';
 })
 export class UsersPageComponent implements OnInit {
   users: User[] = [];
+  roles: Role[] = [];
   selectedUser: User | null = null;
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private rolesService: RolesService,
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.rolesService.getRoles().subscribe({
+      next: (roles) => (this.roles = roles),
+      error: (err) => console.error('Error loading roles:', err),
+    });
+  }
 
   selectUser(user: User): void {
     this.selectedUser = { ...user };

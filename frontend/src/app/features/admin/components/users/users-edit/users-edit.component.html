@@ -3,7 +3,13 @@
         <label for="edit-name">Name</label>
         <input type="text" name="name" id="edit-name" class="form-control input-group" [(ngModel)]="user.name" required>
         <label for="edit-email">Email</label>
-        <input type="email" name="email" id="edit-email" class="form-control input-group" [(ngModel)]="user.email" required>
+        <input type="email" name="email" id="edit-email" class="form-control input-group" [(ngModel)]="user.email"
+            required>
+        <label for="edit-roles">Roles</label>
+        <select name="role" id="edit-roles" class="form-control input-group" [(ngModel)]="selectedRole">
+            <option *ngFor="let role of roles" [value]="role.name">{{ role.name }}</option>
+        </select>
+
     </form>
     <ng-container modal-footer>
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>

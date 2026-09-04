@@ -11,6 +11,7 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Role</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -19,6 +20,11 @@
                     <td>{{ user.id }}</td>
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
+                    <td>
+                        <span *ngFor="let role of user.roles" class="badge bg-primary me-1">
+                            {{ role.name }}
+                        </span>
+                    </td>
                     <td>
                         <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
                             data-bs-target="#editUserModal" (click)="onEdit(user)">
