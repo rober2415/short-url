@@ -1,9 +1,10 @@
-<div class="card border shadow-sm w-100">
+<div class="card border shadow-sm w-100" *ngIf="roles">
     <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
         <h5 class="fw-bold mb-0">Your Roles</h5>
-        <div>
-            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addRoleModal">
-                <i class="bi bi-plus"></i>
+        <div class="d-flex align-items-center gap-2">
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#formRoleModal"
+                (click)="createRole()">
+                <i class="bi bi-plus-lg me-1"></i>
                 <span class="d-none d-md-inline">Add</span>
             </button>
             <span class="badge text-muted border fw-normal">{{ roles.length }} Roles</span>
@@ -25,13 +26,12 @@
                     <td>
                         <div class="btn-group btn-group-sm" role="group">
                             <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#editRoleModal" (click)="onEdit(role)">
+                                data-bs-target="#formRoleModal" (click)="updateRole(role)">
                                 <i class="bi bi-pencil"></i>
                                 <span class="d-none d-md-inline">Edit</span>
                             </button>
-                            <button type="button" class="btn btn-danger btn-sm"><i class="bi bi-trash"
-                                    (click)="onDelete(role.id)"></i> <span
-                                    class="d-none d-md-inline">Delete</span></button>
+                            <button type="button" class="btn btn-danger btn-sm" (click)="deleteRole(role.id)"><i
+                                    class="bi bi-trash"></i> <span class="d-none d-md-inline">Delete</span></button>
                         </div>
                     </td>
                 </tr>

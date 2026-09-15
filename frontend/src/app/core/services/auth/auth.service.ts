@@ -10,14 +10,14 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly apiUrl = environment.apiUrl;
-  private readonly sessionExpiredStorageKey = 'session_expired';
+  private apiUrl = environment.apiUrl;
+  private sessionExpiredStorageKey = 'session_expired';
 
   private currentUserSubject = new BehaviorSubject<CurrentUser | null>(this.getInitialUserFromStorage());
-  public readonly currentUser$ = this.currentUserSubject.asObservable();
+  currentUser$ = this.currentUserSubject.asObservable();
 
-  public readonly isLoggedIn$: Observable<boolean> = this.currentUser$.pipe(map((user) => !!user && this.hasToken()));
-  public readonly isAdmin$: Observable<boolean> = this.currentUser$.pipe(map((user) => !!user?.roles?.includes('admin')));
+  isLoggedIn$: Observable<boolean> = this.currentUser$.pipe(map((user) => !!user && this.hasToken()));
+  isAdmin$: Observable<boolean> = this.currentUser$.pipe(map((user) => !!user?.roles?.includes('admin') || !!user?.roles?.includes('support')));
 
   constructor(
     private httpClient: HttpClient,

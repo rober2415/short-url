@@ -1,6 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { UsersService } from '../../../services/users.service';
-import { RolesService } from '../../../services/roles.service';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { User } from '../../../models/user.interface';
 
 @Component({
@@ -8,51 +6,21 @@ import { User } from '../../../models/user.interface';
   templateUrl: './users-table.component.html',
   styleUrls: ['./users-table.component.scss'],
 })
-export class UsersTableComponent implements OnInit {
-  users: User[] = [];
-  roles: any[] = [];
+export class UsersTableComponent {
+  @Input() users: User[] = [];
+  @Output() createdUser = new EventEmitter<void>();
+  @Output() updatedUser = new EventEmitter<User>();
   @Output() deletedUser = new EventEmitter<number>();
-  @Output() userSelected = new EventEmitter<User>();
 
-  constructor(
-    private usersService: UsersService,
-    private rolesService: RolesService,
-  ) {}
-
-  ngOnInit(): void {
-    this.loadUsers();
-    this.loadRoles();
+  createUser(): void {
+    this.createdUser.emit();
   }
 
-  private loadUsers(): void {
-    this.usersService.getUsers().subscribe({
-      next: (res: any) => {
-        this.users = Array.isArray(res) ? res : (res?.data ?? []);
-      },
-      error: (err) => {
-        console.error('Error al cargar usuarios:', err);
-      },
-    });
+  updateUser(user: User): void {
+    this.updatedUser.emit(user);
   }
 
-  private loadRoles(): void {
-    this.rolesService.getRoles().subscribe({
-      next: (res: any) => {
-        this.roles = Array.isArray(res) ? res : (res?.data ?? []);
-      },
-      error: (err) => {
-        console.error('Error al cargar roles:', err);
-      },
-    });
-  }
-
-  onEdit(user: User): void {
-    this.userSelected.emit(user);
-  }
-
-  onDelete(userId: number): void {
-    if (userId) {
-      this.deletedUser.emit(userId);
-    }
+  deleteUser(id: number): void {
+    this.deletedUser.emit(id);
   }
 }

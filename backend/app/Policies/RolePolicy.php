@@ -44,6 +44,9 @@ class RolePolicy
      */
     public function update(User $user, Role $role): bool
     {
+        if ($role->name === 'admin') {
+            return false;
+        }
         return $user->hasPermissionTo('update-role');
     }
 
@@ -52,22 +55,9 @@ class RolePolicy
      */
     public function delete(User $user, Role $role): bool
     {
+        if ($role->name === 'admin') {
+            return false;
+        }
         return $user->hasPermissionTo('delete-role');
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Role $role): bool
-    {
-        return $user->hasPermissionTo('restore-role');
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Role $role): bool
-    {
-        return $user->hasPermissionTo('force-delete-role');
     }
 }

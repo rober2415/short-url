@@ -1,42 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { RolesService } from '../../../services/roles.service';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Role } from '../../../models/role.interface';
-import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-roles-table',
   templateUrl: './roles-table.component.html',
   styleUrls: ['./roles-table.component.scss'],
 })
-export class RolesTableComponent implements OnInit {
-  roles: Role[] = [];
+export class RolesTableComponent {
+  @Input() roles: Role[] = [];
+  @Output() createdRole = new EventEmitter<Role>();
+  @Output() updatedRole = new EventEmitter<Role>();
   @Output() deletedRole = new EventEmitter<number>();
-  @Output() roleSelected = new EventEmitter<Role>();
-  @Output() addedRole = new EventEmitter<Role>();
-  constructor(private rolesService: RolesService) {}
 
-  ngOnInit(): void {
-    this.loadRoles();
+  createRole(): void {
+    this.createdRole.emit();
   }
 
-  private loadRoles(): void {
-    this.rolesService.getRoles().subscribe({
-      next: (res: any) => {
-        this.roles = Array.isArray(res) ? res : (res?.data ?? []);
-      },
-      error: (err) => {
-        console.error(err);
-      },
-    });
+  updateRole(role: Role): void {
+    this.updatedRole.emit(role);
   }
 
-  onEdit(role: Role): void {
-    this.roleSelected.emit(role);
-  }
-
-  onDelete(roleId: number): void {
-    if (roleId) {
-      this.deletedRole.emit(roleId);
-    }
+  deleteRole(id: number): void {
+    this.deletedRole.emit(id);
   }
 }

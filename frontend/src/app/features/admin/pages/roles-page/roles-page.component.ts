@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Role } from '../../models/role.interface';
+import {
+  CreateRoleRequest,
+  Role,
+  UpdateRoleRequest,
+} from '../../models/role.interface';
 import { RolesService } from '../../services/roles.service';
+import { PermissionsService } from '../../services/permissions.service';
 
 @Component({
   selector: 'app-roles-page',
@@ -8,36 +13,38 @@ import { RolesService } from '../../services/roles.service';
   styleUrls: ['./roles-page.component.scss'],
 })
 export class RolesPageComponent implements OnInit {
-  roles: Role[] = [];
-  selectedRole: Role | null = null;
-  constructor(private rolesService: RolesService) {}
+  roles$ = this.rolesService.roles$;
+  permissions$ = this.permisissionService.permissions$;
 
-  ngOnInit(): void {}
+  roleSelected: Role | null = null;
 
-  selectRole(role: Role): void {
-    this.selectedRole = { ...role };
+  constructor(
+    private rolesService: RolesService,
+    private permisissionService: PermissionsService,
+  ) {}
+
+  ngOnInit(): void {
+    this.rolesService.getRoles().subscribe();
+    this.permisissionService.getPermissions().subscribe();
   }
 
-  updateRole(role: Role): void {
+  onCreate(role: CreateRoleRequest): void {
+    this.rolesService.createRole(role).subscribe({
+      next: () => this.roleSelected = null,
+      error: (error) => console.log(error),
+    });
+  }
+
+  onUpdate(role: UpdateRoleRequest): void {
     this.rolesService.updateRole(role.id, role).subscribe({
-      next: () => {
-        this.selectedRole = null;
-      },
-      error: (err) => {
-        console.error('Error updating role:', err);
-      },
+      next: () => this.roleSelected = null,
+      error: (error) => console.log(error),
     });
   }
 
-  deleteRole(roleId: number): void {
-    if (!roleId) return;
-    this.rolesService.deleteRole(roleId).subscribe({
-      next: () => {
-        this.roles = this.roles.filter((role) => role.id !== roleId);
-      },
-      error: (err) => {
-        console.error('Error deleting role:', err);
-      },
-    });
+  onDelete(roleId: number): void {
+    if (roleId) {
+      this.rolesService.deleteRole(roleId).subscribe();
+    }
   }
 }

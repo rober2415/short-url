@@ -1,3 +1,12 @@
-<app-users-table (deletedUser)="deleteUser($event)" (userSelected)="selectUser($event)"></app-users-table>
-<app-users-edit [user]="selectedUser" [roles]="roles"
-	(userUpdated)="updateUser($event)"></app-users-edit>
+<app-users-table 
+    [users]="(users$ | async) ?? []"
+    (createdUser)="userSelected = null" 
+    (updatedUser)="userSelected = $event"
+    (deletedUser)="onDelete($event)">
+</app-users-table>
+<app-users-form 
+    [user]="userSelected" 
+    [roles]="(roles$ | async) ?? []" 
+    (createdUser)="onCreate($event)"
+    (updatedUser)="onUpdate($event)">
+</app-users-form>

@@ -1,2 +1,12 @@
-<app-roles-table (deletedRole)="deleteRole($event)" (roleSelected)="selectRole($event)"></app-roles-table>
-<app-roles-edit [role]="selectedRole" (roleUpdated)="updateRole($event)"></app-roles-edit>
+<app-roles-table 
+    [roles]="(roles$ | async) ?? []"
+    (createdRole)="roleSelected = null"
+    (updatedRole)="roleSelected = $event"
+    (deletedRole)="onDelete($event)">
+</app-roles-table>
+<app-roles-form
+    [role]="roleSelected"
+    [permissions]="(permissions$ | async)  ?? []"
+    (createdRole)="onCreate($event)"
+    (updatedRole)="onUpdate($event)">
+</app-roles-form>

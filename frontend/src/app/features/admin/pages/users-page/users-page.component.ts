@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../../services/users.service';
-import { User } from '../../models/user.interface';
+import {
+  CreateUserRequest,
+  UpdateUserRequest,
+  User,
+} from '../../models/user.interface';
 import { Role } from '../../models/role.interface';
 import { RolesService } from '../../services/roles.service';
 
@@ -10,45 +14,39 @@ import { RolesService } from '../../services/roles.service';
   styleUrls: ['./users-page.component.scss'],
 })
 export class UsersPageComponent implements OnInit {
-  users: User[] = [];
+  users$ = this.usersService.users$;
+  roles$ = this.rolesService.roles$;
+
   roles: Role[] = [];
-  selectedUser: User | null = null;
+  userSelected: User | null = null;
+
   constructor(
     private usersService: UsersService,
     private rolesService: RolesService,
   ) {}
 
   ngOnInit(): void {
-    this.rolesService.getRoles().subscribe({
-      next: (roles) => (this.roles = roles),
-      error: (err) => console.error('Error loading roles:', err),
+    this.usersService.getUsers().subscribe();
+    this.rolesService.getRoles().subscribe();
+  }
+
+  onCreate(user: CreateUserRequest): void {
+    this.usersService.createUser(user).subscribe({
+      next: () => this.userSelected = null,
+      error: (error) => console.log(error),
     });
   }
 
-  selectUser(user: User): void {
-    this.selectedUser = { ...user };
-  }
-
-  updateUser(user: User): void {
+  onUpdate(user: UpdateUserRequest): void {
     this.usersService.updateUser(user.id, user).subscribe({
-      next: () => {
-        this.selectedUser = null;
-      },
-      error: (err) => {
-        console.error('Error updating user:', err);
-      },
+      next: () => this.userSelected = null,
+      error: (error) => console.log(error),
     });
   }
 
-  deleteUser(userId: number): void {
-    if (!userId) return;
-    this.usersService.deleteUser(userId).subscribe({
-      next: () => {
-        this.users = this.users.filter((user) => user.id !== userId);
-      },
-      error: (err) => {
-        console.error('Error deleting user:', err);
-      },
-    });
+  onDelete(userId: number): void {
+    if (userId) {
+      this.usersService.deleteUser(userId).subscribe();
+    }
   }
 }

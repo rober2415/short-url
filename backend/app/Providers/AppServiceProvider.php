@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
                     return false;
                 }
 
-                $expiredByInactivity = $lastActivityAt->lt(now()->subMinutes(5));
+                $expiredByInactivity = $lastActivityAt->lt(now()->subMinutes(600));
 
                 if ($expiredByInactivity) {
                     $accessToken->delete();
