@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
-import { ComponentsModule } from './core/components/components.module';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { AppLayoutComponent } from './layout/app-layout/app-layout.component';
 
@@ -18,7 +17,6 @@ import { AppLayoutComponent } from './layout/app-layout/app-layout.component';
     FormsModule,
     HttpClientModule,
     SharedModule,
-    ComponentsModule,
   ],
   providers: [
     {

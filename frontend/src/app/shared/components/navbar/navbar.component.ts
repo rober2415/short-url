@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth/auth.service';
-import { ThemeMode, ThemeService } from '../../services/theme/theme.service';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { ThemeMode, ThemeService } from 'src/app/core/services/theme/theme.service';
+
 
 @Component({
   selector: 'app-navbar',
