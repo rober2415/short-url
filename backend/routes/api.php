@@ -8,12 +8,12 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 
-//Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+//Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:register');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
 
-Route::post('/urls', [UrlController::class, 'store']);
+Route::post('/urls', [UrlController::class, 'store'])->middleware('throttle:short-url-create');
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum', 'throttle:api')->group(function () {
     Route::get('/urls', [UrlController::class, 'index']);
     Route::get('/urls/{url}', [UrlController::class, 'show']);
     Route::put('/urls/{url}', [UrlController::class, 'update']);

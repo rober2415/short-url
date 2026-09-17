@@ -34,6 +34,9 @@ export class RegisterPageComponent {
         this.isLoading = false;
         if (error.status === 409 || error.status === 422) {
           this.errorMessage = 'A user with that email address already exists.';
+        } else if (error.status === 429) {
+          this.errorMessage =
+            'To many attempts. Please try again in 5 minutes.';
         } else {
           this.errorMessage =
             'An error occurred whilst you were registering. Please try again.';

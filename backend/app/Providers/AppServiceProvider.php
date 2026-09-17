@@ -3,9 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Gate;
-use Spatie\Permission\Models\Role;
-use App\Policies\RolePolicy;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Laravel\Sanctum\PersonalAccessToken;
 use Laravel\Sanctum\Sanctum;
 
@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-    {      
+    {
         Sanctum::authenticateAccessTokensUsing(
             static function (PersonalAccessToken $accessToken, bool $isValid): bool {
                 if (! $isValid) {
@@ -47,5 +47,21 @@ class AppServiceProvider extends ServiceProvider
                 return true;
             }
         );
+
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        RateLimiter::for('login', function (Request $request) {
+            return Limit::perMinutes(5, 5)->by($request->ip());
+        });
+
+        RateLimiter::for('register', function (Request $request) {
+            return Limit::perMinutes(5, 3)->by($request->ip());
+        });
+
+        RateLimiter::for('short-url-create', function (Request $request) {
+            return Limit::perMinute(20)->by($request->user()?->id ?: $request->ip());
+        });
     }
 }
