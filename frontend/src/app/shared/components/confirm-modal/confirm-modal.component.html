@@ -1,0 +1,19 @@
+<div class="modal-header border-transparent">
+    <h5 class="modal-title">{{ options.title || 'Confirm action' }}</h5>
+    <button type="button" class="btn-close" (click)="activeModal.dismiss()">
+    </button>
+</div>
+
+<div class="modal-body">
+    <p class="mb-0">{{ options.message }}</p>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">
+        {{ options.cancelText }}
+    </button>
+
+    <button type="button" class="btn" [ngClass]="'btn-' + options.type" (click)="onConfirm()">
+        {{ options.confirmText }}
+    </button>
+</div>

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LinksService } from '../../services/links.service';
-import { AuthService } from 'src/app/core/services/auth/auth.service';
-import { Link } from 'src/app/core/models/link.interface';
+import { ToastService } from 'src/app/core/services/toast/toast.service';
+import { ConfirmModalService } from 'src/app/core/services/confirm-modal/confirm-modal.service';
+import { filter, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-links-page',
@@ -9,51 +10,40 @@ import { Link } from 'src/app/core/models/link.interface';
   styleUrls: ['./links-page.component.scss'],
 })
 export class LinksPageComponent implements OnInit {
-  links: Link[] = [];
-  isLoading = true;
-  isDeleting = false;
+  links$ = this.linksService.links$;
+  isLoading$ = this.linksService.isLoading$;
+  isDeletingId$ = this.linksService.isDeleting$;
 
   constructor(
     private linksService: LinksService,
-    private authService: AuthService,
+    private toastService: ToastService,
+    private confirmModalService: ConfirmModalService,
   ) {}
 
   ngOnInit(): void {
-    const userId = this.authService.getUserId();
-
-    if (!userId) {
-      console.warn('No user ID found in session');
-      this.isLoading = false;
-      return;
-    }
-
     this.linksService.getUserLinks().subscribe({
-      next: (links) => {
-        this.links = links;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Error loading user links', err);
-        this.isLoading = false;
-      },
+      error: (error) => console.error('Error loading user links', error),
     });
   }
 
-  deleteLink(id?: number): void {
-    if (!id) {
-      this.isDeleting = false;
-      return;
-    }
-    this.isDeleting = true;
-    this.linksService.deleteLink(id).subscribe({
-      next: () => {
-        this.links = this.links.filter(link => link.id !== id);
-        this.isDeleting = false;
-      },
-      error: (err) => {
-        console.error('Error deleting link', err);
-        this.isDeleting = false;
-      },
-    });
+  onDelete(linkId: number): void {
+    if (!linkId) return;
+
+    this.confirmModalService
+      .confirm({
+        title: 'Delete link',
+        message: 'Are you sure you want to delete this link?',
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+        type: 'danger',
+      })
+      .pipe(
+        filter((confirmed) => confirmed),
+        switchMap(() => this.linksService.deleteLink(linkId)),
+      )
+      .subscribe({
+        next: () => this.toastService.success('Link deleted successfully.'),
+        error: () => this.toastService.error('Error deleting link.'),
+      });
   }
 }

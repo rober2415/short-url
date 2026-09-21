@@ -21,12 +21,6 @@ nav .dropdown-item:hover {
     color: var(--theme-navbar-hover-fg);
 }
 
-
 nav .dropdown-toggle::after {
     border-top-color: var(--theme-navbar-fg) !important;
-}
-
-nav .offcanvas .btn-close {
-    --bs-btn-close-bg: var(--theme-navbar-close-icon-bg);
-    opacity: 1;
 }
