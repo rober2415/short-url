@@ -6,11 +6,7 @@
 
     <div class="card-body p-0 mt-3">
 
-        <div *ngIf="isLoading; else contentBlock" class="text-center py-5">
-            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
+        <app-spinner *ngIf="isLoading; else contentBlock" size="lg"></app-spinner>
 
         <ng-template #contentBlock>
             <div *ngIf="!hasData" class="text-center py-5">
@@ -60,9 +56,7 @@
                                     </button>
                                     <button type="button" class="btn btn-outline-danger" (click)="deleteLink(link.id)"
                                         title="Delete link" [disabled]="isDeletingId === link.id">
-                                        <span *ngIf="isDeletingId === link.id" class="spinner-border spinner-border-sm"
-                                            role="status" aria-hidden="true">
-                                        </span>
+                                        <app-spinner *ngIf="isDeletingId === link.id" size="sm"></app-spinner>
                                         <i *ngIf="isDeletingId !== link.id" class="bi bi-trash"></i>
                                     </button>
                                 </div>

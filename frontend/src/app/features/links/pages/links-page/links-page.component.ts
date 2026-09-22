@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LinksService } from '../../services/links.service';
+import { LinksService } from '../../../../core/services/links/links.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { ConfirmModalService } from 'src/app/core/services/confirm-modal/confirm-modal.service';
 import { filter, switchMap } from 'rxjs';

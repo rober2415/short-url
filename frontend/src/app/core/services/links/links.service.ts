@@ -29,10 +29,6 @@ export class LinksService {
     );
   }
 
-  getLink(id: number): Observable<Link> {
-    return this.http.get<Link>(`${this.apiUrl}/${id}`);
-  }
-
   createLink(originalUrl: string): Observable<Link> {
     return this.http.post<Link>(this.apiUrl, { original_url: originalUrl }).pipe(
       tap((created) => 

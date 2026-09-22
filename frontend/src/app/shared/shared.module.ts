@@ -9,11 +9,12 @@ import { RouterModule } from '@angular/router';
 import { ToastComponent } from './components/toast/toast.component';
 import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
 import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import { SpinnerComponent } from './components/spinner/spinner/spinner.component';
 
 @NgModule({
-  declarations: [NavbarComponent, FooterComponent, CleanUrlPipe, ShortUrlPipe, ModalComponent, ToastComponent, ConfirmModalComponent],
+  declarations: [NavbarComponent, FooterComponent, CleanUrlPipe, ShortUrlPipe, ModalComponent, ToastComponent, ConfirmModalComponent, SpinnerComponent],
   imports: [CommonModule, RouterModule, NgbToastModule],
-  exports: [NavbarComponent, FooterComponent, CleanUrlPipe, ShortUrlPipe, ModalComponent, ToastComponent, ConfirmModalComponent],
+  exports: [NavbarComponent, FooterComponent, CleanUrlPipe, ShortUrlPipe, ModalComponent, ToastComponent, ConfirmModalComponent, SpinnerComponent],
   providers: [CleanUrlPipe, ShortUrlPipe],
 })
 export class SharedModule {}
