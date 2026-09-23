@@ -34,7 +34,7 @@ export class LoginPageComponent implements OnInit {
             'Incorrect login details. Please check your email address and password.';
         } else if (error.status === 429) {
           this.errorMessage =
-            'To many attempts. Please try again in 5 minutes.';
+            'Too many attempts. Please try again in 5 minutes.';
         } else{
           this.errorMessage =
             'An error occurred whilst trying to log in. Please try again.';

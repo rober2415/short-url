@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppLayoutComponent } from './layout/app-layout/app-layout.component';
+import { AdminGuard } from './core/guards/admin.guard';
+import { AuthGuard } from './core/guards/auth.guard';
+import { GuestGuard } from './core/guards/guest.guard';
 
 const routes: Routes = [
   {
@@ -16,11 +19,13 @@ const routes: Routes = [
       },
       {
         path: 'login',
+        canActivate: [GuestGuard],
         loadChildren: () =>
           import('./features/login/login.module').then((m) => m.LoginModule),
       },
       {
         path: 'register',
+        canActivate: [GuestGuard],
         loadChildren: () =>
           import('./features/register/register.module').then(
             (m) => m.RegisterModule,
@@ -28,11 +33,13 @@ const routes: Routes = [
       },
       {
         path: 'links',
+        canActivate: [AuthGuard],
         loadChildren: () =>
           import('./features/links/links.module').then((m) => m.LinksModule),
       },
       {
         path: 'analytics',
+        canActivate: [AuthGuard],
         loadChildren: () =>
           import('./features/analytics/analytics.module').then(
             (m) => m.AnalyticsModule,
@@ -40,6 +47,7 @@ const routes: Routes = [
       },
       {
         path: 'profile',
+        canActivate: [AuthGuard],
         loadChildren: () =>
           import('./features/profile/profile.module').then(
             (m) => m.ProfileModule,
@@ -49,6 +57,7 @@ const routes: Routes = [
   },
   {
     path: 'settings',
+    canActivate: [AdminGuard],
     loadChildren: () =>
       import('./features/admin/admin.module').then((m) => m.AdminModule),
   },
