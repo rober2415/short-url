@@ -33,13 +33,13 @@ const routes: Routes = [
       },
       {
         path: 'links',
-        canActivate: [AuthGuard],
+        canLoad: [AuthGuard],
         loadChildren: () =>
           import('./features/links/links.module').then((m) => m.LinksModule),
       },
       {
         path: 'analytics',
-        canActivate: [AuthGuard],
+        canLoad: [AuthGuard],
         loadChildren: () =>
           import('./features/analytics/analytics.module').then(
             (m) => m.AnalyticsModule,
@@ -47,7 +47,7 @@ const routes: Routes = [
       },
       {
         path: 'profile',
-        canActivate: [AuthGuard],
+        canLoad: [AuthGuard],
         loadChildren: () =>
           import('./features/profile/profile.module').then(
             (m) => m.ProfileModule,
@@ -57,7 +57,7 @@ const routes: Routes = [
   },
   {
     path: 'settings',
-    canActivate: [AdminGuard],
+    canLoad: [AdminGuard],
     loadChildren: () =>
       import('./features/admin/admin.module').then((m) => m.AdminModule),
   },
