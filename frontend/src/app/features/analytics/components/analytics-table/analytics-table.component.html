@@ -6,11 +6,7 @@
 
     <div class="card-body p-0 mt-3">
 
-        <div *ngIf="isLoading; else contentBlock" class="text-center py-5">
-            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
+        <app-spinner *ngIf="isLoading; else contentBlock" size="lg"></app-spinner>
 
         <ng-template #contentBlock>
             <div *ngIf="!hasData" class="text-center py-5">
@@ -67,8 +63,7 @@
                                 </span>
                             </td>
                             <td class="pe-4 text-end">
-                                <button type="button" class="btn btn-sm border-0"
-                                    [title]="analytic.user_agent">
+                                <button type="button" class="btn btn-sm border-0" [title]="analytic.user_agent">
                                     <i class="bi bi-info-circle text-muted"></i>
                                 </button>
                             </td>

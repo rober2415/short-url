@@ -1,0 +1,49 @@
+<div class="card border shadow-sm w-100" *ngIf="users">
+    <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0">Your Users</h5>
+        <div class="d-flex align-items-center gap-2">
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#formUserModal" (click)="createUser()">
+                <i class="bi bi-plus-lg me-1"></i>
+                <span class="d-none d-md-inline">Add</span>
+            </button>
+            <span class="badge text-muted border fw-normal">{{ users.length }} Users</span>
+        </div>
+    </div>
+
+    <div class="card-body table-responsive p-0 mt-3">
+        <table class="table table-hover align-middle users-table mb-0">
+            <thead class="small border-top">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users">
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <span *ngFor="let role of user.roles" class="badge bg-primary me-1">
+                            {{ role.name || role }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                (click)="updateUser(user)" data-bs-target="#formUserModal">
+                                <i class="bi bi-pencil"></i>
+                                <span class="d-none d-md-inline">Edit</span>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm" (click)="deleteUser(user.id)"><i
+                                    class="bi bi-trash"></i> <span class="d-none d-md-inline">Delete</span></button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

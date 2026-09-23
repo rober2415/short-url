@@ -16,9 +16,9 @@ import { ShortUrlPipe } from 'src/app/shared/pipes/short-url.pipe';
 })
 export class LinksTableComponent implements OnChanges {
   @Input() links: Link[] = [];
-  @Input() isDeleting = false;
+  @Input() isDeletingId: number | null = null;
   @Input() isLoading = false;
-  @Output() deletedRequested = new EventEmitter<number>();
+  @Output() deletedLink = new EventEmitter<number>();
 
   itemsPerPage = 10;
   currentPage = 1;
@@ -83,9 +83,9 @@ export class LinksTableComponent implements OnChanges {
     navigator.clipboard.writeText(fullUrl).then(() => {});
   }
 
-  onDelete(id?: number): void {
+  deleteLink(id?: number): void {
     if (id) {
-      this.deletedRequested.emit(id);
+      this.deletedLink.emit(id);
     }
   }
 }

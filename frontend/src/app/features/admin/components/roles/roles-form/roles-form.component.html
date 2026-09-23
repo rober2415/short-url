@@ -1,0 +1,24 @@
+<app-modal modalId="formRoleModal" [title]="isEditMode ? 'Edit role' : 'Create role'">
+    <form modal-body class="d-flex flex-column gap-2" id="roleForm" [formGroup]="roleForm"  (ngSubmit)="onSubmit()">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" class="form-control input-group" formControlName="name" required>
+    
+        <label>Permissions</label>
+        <div formGroupName="permissions" class="d-flex flex-column gap-1">
+            <div class="form-check" *ngFor="let permission of permissions">
+                <input class="form-check-input" type="checkbox" 
+                    [id]="'permission-' + permission.id" 
+                    [formControlName]="permission.id">
+                <label class="form-check-label" [for]="'permission-' + permission.id">
+                    {{ permission.name }}
+                </label>
+            </div>
+        </div>
+    </form>
+    <ng-container modal-footer>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success" form="roleForm" data-bs-dismiss="modal">
+            {{ isEditMode  ? 'Save changes' : 'Create role' }}
+        </button>
+    </ng-container>
+</app-modal>

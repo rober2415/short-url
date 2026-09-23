@@ -35,7 +35,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
           if (!isAuthEndpoint) {
             const authService = this.injector.get(AuthService);
-            if (authService.isLoggedIn()) {
+            if (authService.isLoggedIn) {
               authService.logout(true);
             }
           }

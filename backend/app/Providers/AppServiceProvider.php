@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\PersonalAccessToken;
 use Laravel\Sanctum\Sanctum;
 
@@ -33,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
                     return false;
                 }
 
-                $expiredByInactivity = $lastActivityAt->lt(now()->subMinutes(5));
+                $expiredByInactivity = $lastActivityAt->lt(now()->subMinutes(600));
 
                 if ($expiredByInactivity) {
                     $accessToken->delete();
@@ -44,5 +48,27 @@ class AppServiceProvider extends ServiceProvider
                 return true;
             }
         );
+
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        RateLimiter::for('login', function (Request $request) {
+            $email = Str::lower(trim((string) $request->input('email')));
+            $emailKey = $email !== '' ? $email : $request->ip();
+            return [
+                Limit::perMinutes(5, 5)->by($emailKey . '|' . $request->ip()),
+                Limit::perMinutes(5, 10)->by($emailKey),
+                Limit::perMinute(60)->by($request->ip()),
+            ];
+        });
+
+        RateLimiter::for('register', function (Request $request) {
+            return Limit::perMinutes(5, 3)->by($request->ip());
+        });
+
+        RateLimiter::for('short-url-create', function (Request $request) {
+            return Limit::perMinute(20)->by($request->user()?->id ?: $request->ip());
+        });
     }
 }

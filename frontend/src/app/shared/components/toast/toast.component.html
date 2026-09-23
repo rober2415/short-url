@@ -1,0 +1,14 @@
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <ngb-toast class="border-0 shadow-sm mb-2" 
+        *ngFor="let toast of toastService.toasts" 
+        [autohide]="true" 
+        [delay]="5000"
+        (hidden)="toastService.remove(toast)">
+        <ng-template ngbToastHeader>
+            <i class="bi bi-check-circle-fill text-success me-2" *ngIf="toast.type === 'success'"></i>
+            <i class="bi bi-exclamation-circle-fill text-danger me-2" *ngIf="toast.type === 'error'"></i>
+            <strong class="me-auto">{{ toast.title }}</strong>
+        </ng-template>
+        {{ toast.message }}
+    </ngb-toast>
+</div>

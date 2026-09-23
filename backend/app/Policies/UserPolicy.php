@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use Illuminate\Auth\Access\Response;
 use App\Models\User;
 
 class UserPolicy
@@ -44,6 +43,9 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
+        if ($user->hasRole('admin')) {
+            return false;
+        }
         return $user->id === $model->id || $user->hasPermissionTo('update-any-user');
     }
 
@@ -52,6 +54,9 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
+        if ($user->hasRole('admin')) {
+            return false;
+        }
         return $user->id === $model->id || $user->hasPermissionTo('delete-any-user');
     }
 
@@ -68,6 +73,9 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model): bool
     {
+        if ($user->hasRole('admin')) {
+            return false;
+        }
         return $user->hasPermissionTo('force-delete-any-user');
     }
 }
