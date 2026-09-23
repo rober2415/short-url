@@ -11,136 +11,91 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
-  private sessionExpiredStorageKey = 'session_expired';
+  private sessionExpiredKey = 'session_expired';
 
-  private currentUserSubject = new BehaviorSubject<CurrentUser | null>(this.getInitialUserFromStorage());
+  private currentUserSubject = new BehaviorSubject<CurrentUser | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  isLoggedIn$: Observable<boolean> = this.currentUser$.pipe(map((user) => !!user && this.hasToken()));
-  isAdmin$: Observable<boolean> = this.currentUser$.pipe(map((user) => !!user?.roles?.includes('admin') || !!user?.roles?.includes('support')));
+  isLoggedIn$: Observable<boolean> = this.currentUser$.pipe(
+    map((user) => !!user && this.hasToken)
+  );
+
+  isAdmin$: Observable<boolean> = this.currentUser$.pipe(
+    map((user) => ['admin', 'support'].some((role) => user?.roles.includes(role)))
+  );
 
   constructor(
-    private httpClient: HttpClient,
-    private router: Router,
-  ) {
-    if (this.isLoggedIn()) {
-      this.fetchUserProfile().subscribe();
-    }
+    private http: HttpClient,
+    private router: Router
+  ) {}
+
+  get user(): CurrentUser | null {
+    return this.currentUserSubject.value;
   }
 
-  getUserName(): string {
-    return localStorage.getItem('user_name') || '';
+  get userId(): number | null {
+    return this.user?.id ?? null;
   }
 
-  getUserId(): number | null {
-    const userIdStr = localStorage.getItem('user_id');
-    return userIdStr ? parseInt(userIdStr, 10) : null;
+  get isLoggedIn(): boolean {
+    return !!this.user && this.hasToken;
   }
 
-  private hasToken(): boolean {
+  get isAdmin(): boolean {
+    return ['admin', 'support'].some((role) => this.user?.roles.includes(role));
+  }
+
+  get hasToken(): boolean {
     return !!localStorage.getItem('auth_token');
   }
 
-  isLoggedIn(): boolean {
-    return this.hasToken();
+  initializeAuth(): Observable<CurrentUser | null> {
+    return this.hasToken ? this.fetchUserProfile() : of(null);
   }
 
-  private hasRole(role: string): boolean {
-    const roles: string[] = JSON.parse(
-      localStorage.getItem('user_roles') || '[]',
-    );
-    return roles.includes(role);
-  }
-
-  isAdmin(): boolean {
-    return this.hasRole('admin') || this.hasRole('support');
-  }
-
-  consumeSessionExpiredFlag(): boolean {
-    const isExpired =
-      sessionStorage.getItem(this.sessionExpiredStorageKey) === '1';
-    if (isExpired) {
-      sessionStorage.removeItem(this.sessionExpiredStorageKey);
+  fetchUserProfile(): Observable<CurrentUser | null> {
+    if (!this.hasToken) {
+      this.logout();
+      return of(null);
     }
-    return isExpired;
+
+    return this.http.get<any>(`${this.apiUrl}/user`).pipe(
+      map((res) => this.formatUser(res?.user ?? res)),
+      tap((user) => this.currentUserSubject.next(user)),
+      catchError((error) => {
+        if (error.status === 401) this.logout(true);
+        return of(null);
+      })
+    );
   }
 
   login(credentials: AuthUser): Observable<any> {
-    return this.httpClient.post<any>(`${this.apiUrl}/login`, credentials).pipe(
-      tap((response) => {
-        const user = this.formatUser(response.user);
-        this.setSession(response.token, user);
+    return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
+      tap((res) => {
+        localStorage.setItem('auth_token', res.token);
+        this.currentUserSubject.next(this.formatUser(res.user));
         this.router.navigate(['/']);
-      }),
+      })
     );
   }
 
   register(userData: AuthUser): Observable<any> {
-    return this.httpClient.post(`${this.apiUrl}/register`, userData);
-  }
-
-  fetchUserProfile(): Observable<CurrentUser | null> {
-    if (!this.isLoggedIn()) {
-      this.clearSession();
-      return of(null);
-    }
-
-    return this.httpClient.get<any>(`${this.apiUrl}/user`).pipe(
-      map((res) => this.formatUser(res?.user ?? res)),
-      tap((user) => this.updateUserSession(user)),
-      catchError((error) => {
-        if (error.status === 401) {
-          this.logout(true);
-        }
-        return of(null);
-      }),
-    );
+    return this.http.post(`${this.apiUrl}/register`, userData);
   }
 
   logout(sessionExpired = false): void {
     if (sessionExpired) {
-      sessionStorage.setItem(this.sessionExpiredStorageKey, '1');
+      sessionStorage.setItem(this.sessionExpiredKey, '1');
     }
-    this.clearSession();
+    localStorage.removeItem('auth_token');
+    this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
   }
 
-  private setSession(token: string, user: CurrentUser): void {
-    localStorage.setItem('auth_token', token);
-    this.updateUserSession(user);
-  }
-
-  private updateUserSession(user: CurrentUser): void {
-    localStorage.setItem('user_name', user.name);
-    localStorage.setItem('user_id', user.id.toString());
-    localStorage.setItem('user_roles', JSON.stringify(user.roles));
-    this.currentUserSubject.next(user);
-  }
-
-  private clearSession(): void {
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user_name');
-    localStorage.removeItem('user_id');
-    localStorage.removeItem('user_roles');
-    this.currentUserSubject.next(null);
-  }
-
-  private getInitialUserFromStorage(): CurrentUser | null {
-    if (!this.isLoggedIn()) return null;
-    try {
-      const storedRoles = localStorage.getItem('user_roles');
-      const roles = storedRoles ? JSON.parse(storedRoles) : [];
-      const id = localStorage.getItem('user_id');
-      const name = localStorage.getItem('user_name') || '';
-
-      return {
-        id: id ? parseInt(id, 10) : 0,
-        name,
-        roles: Array.isArray(roles) ? roles : [],
-      };
-    } catch {
-      return null;
-    }
+  consumeSessionExpiredFlag(): boolean {
+    const expired = sessionStorage.getItem(this.sessionExpiredKey) === '1';
+    if (expired) sessionStorage.removeItem(this.sessionExpiredKey);
+    return expired;
   }
 
   private formatUser(user: any): CurrentUser {

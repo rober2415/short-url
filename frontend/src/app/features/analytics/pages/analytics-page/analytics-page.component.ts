@@ -20,7 +20,7 @@ export class AnalyticsPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const userId = this.authService.getUserId();
+    const userId = this.authService.userId;
 
     if (!userId) {
       return;

@@ -12,7 +12,7 @@ export class GuestGuard implements CanActivate {
   ) {}
 
   canActivate(): boolean | UrlTree {
-    if (!this.authService.isLoggedIn()) {
+    if (!this.authService.isLoggedIn) {
       return true;
     }
 
