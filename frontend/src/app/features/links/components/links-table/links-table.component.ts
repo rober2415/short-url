@@ -20,6 +20,9 @@ export class LinksTableComponent implements OnChanges {
   @Input() isLoading = false;
   @Output() deletedLink = new EventEmitter<number>();
 
+  copiedLinkId: number | null = null;
+  private copyTimeout?: ReturnType<typeof setTimeout>;
+
   itemsPerPage = 10;
   currentPage = 1;
   paginatedLinks: Link[] = [];
@@ -78,9 +81,19 @@ export class LinksTableComponent implements OnChanges {
     }
   }
 
-  copyToClipboard(url: string): void {
+  copyToClipboard(url: string, id?: number): void {
+    if (!id) return;
     const fullUrl = this.shortUrlPipe.transform(url);
-    navigator.clipboard.writeText(fullUrl).then(() => {});
+
+    navigator.clipboard.writeText(fullUrl).then(() => {
+      if (this.copyTimeout) {
+        clearTimeout(this.copyTimeout);
+      }
+      this.copiedLinkId = id;
+      this.copyTimeout = setTimeout(() => {
+        this.copiedLinkId = null;
+      }, 1500);
+    });
   }
 
   deleteLink(id?: number): void {

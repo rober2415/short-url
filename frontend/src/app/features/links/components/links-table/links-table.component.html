@@ -51,8 +51,9 @@
                             <td class="pe-4">
                                 <div class="btn-group btn-group-sm" role="group">
                                     <button type="button" class="btn btn-outline-primary"
-                                        (click)="copyToClipboard(link.short_url)" title="Copy to clipboard">
-                                        <i class="bi bi-clipboard"></i>
+                                        (click)="copyToClipboard(link.short_url, link.id)" title="Copy to clipboard">
+                                        <i *ngIf="copiedLinkId !== link.id" class="bi bi-copy"></i>
+                                        <i *ngIf="copiedLinkId === link.id" class="bi bi-check-lg"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline-danger" (click)="deleteLink(link.id)"
                                         title="Delete link" [disabled]="isDeletingId === link.id">
