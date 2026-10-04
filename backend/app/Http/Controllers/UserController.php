@@ -59,9 +59,61 @@ class UserController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'roles' => $user->getRoleNames(),
+            'created_at' => $user->created_at,
         ], 200);
     }
-    
+
+    /**
+     * Update the authenticated user's profile.
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+
+        $validatedData = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'email' => ['sometimes', 'required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'password' => 'nullable|string|min:8',
+            'oldPassword' => 'nullable|string',
+        ]);
+
+        if (!empty($validatedData['password'])) {
+            if (empty($validatedData['oldPassword']) || !Hash::check($validatedData['oldPassword'], $user->password)) {
+                return response()->json([
+                    'message' => 'The old password is incorrect',
+                ], 422);
+            }
+        }
+
+        unset($validatedData['oldPassword']);
+
+        if (empty($validatedData['password'])) {
+            unset($validatedData['password']);
+        }
+
+        $user->update($validatedData);
+
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'roles' => $user->getRoleNames(),
+            'created_at' => $user->created_at,
+        ], 200);
+    }
+
+    /**
+     * Remove the authenticated user's profile.
+     */
+    public function deleteProfile(Request $request)
+    {
+        $user = $request->user();
+
+        $user->tokens()->delete();
+        $user->delete();
+        return response()->json(['message' => 'User successfully deleted'], 200);
+    }
+
     /**
      * Display the authenticated user.
      */

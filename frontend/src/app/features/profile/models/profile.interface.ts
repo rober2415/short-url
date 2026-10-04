@@ -2,7 +2,14 @@ export interface Profile {
   id: number;
   name: string;
   email: string;
-  oldPassword?: string;
-  password?: string;
   created_at: string;
+}
+
+export interface UpdateProfileRequest {
+  name: string;
+}
+
+export interface UpdatePasswordRequest {
+  oldPassword: string;
+  password: string;
 }
