@@ -13,6 +13,18 @@ nav a {
     color: var(--theme-navbar-fg);
 }
 
+.nav-item a {
+    padding: 0;
+    margin: 8px;
+    display: inline-flex;
+    border-bottom: solid 1px transparent;
+    transition: border-color 0.2s ease;
+}
+
+.nav-item a:hover {
+    border-bottom: solid 1px var(--theme-navbar-fg);
+}
+
 nav .dropdown-toggle,
 nav .dropdown-toggle i,
 nav .dropdown-toggle:hover,
