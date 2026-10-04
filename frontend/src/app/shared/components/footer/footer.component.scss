@@ -1,6 +1,7 @@
 footer {
-    background-color: var(--bs-body-bg);
+    background-color: var(--theme-footer-bg);
     color: var(--bs-body-color);
+    border-color: var(--theme-border)!important;
 }
 
 footer a {
