@@ -6,9 +6,9 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./profile-delete.component.scss'],
 })
 export class ProfileDeleteComponent {
-  @Output() deleteProfile: EventEmitter<void> = new EventEmitter<void>();
+  @Output() deletedProfile: EventEmitter<void> = new EventEmitter<void>();
 
   deleteUserProfile(): void {
-    this.deleteProfile.emit();
+    this.deletedProfile.emit();
   }
 }

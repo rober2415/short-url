@@ -22,6 +22,8 @@ Route::middleware('auth:sanctum', 'throttle:api')->group(function () {
     Route::get('/analytics', [AnalyticController::class, 'index']);
 
     Route::get('/user', [UserController::class, 'profile']);
+    Route::patch('/user', [UserController::class, 'updateProfile']);
+    Route::delete('/user', [UserController::class, 'deleteProfile']);
 
     Route::middleware(['role:admin|support'])->group(function () {
         Route::get('/users', [UserController::class, 'index']);

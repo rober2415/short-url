@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ProfileRoutingModule } from './profile-routing.module';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
@@ -16,7 +16,7 @@ import { SharedModule } from '../../shared/shared.module';
     ProfileEditComponent,
     ProfileDeleteComponent,
   ],
-  imports: [CommonModule, ProfileRoutingModule, FormsModule, SharedModule],
+  imports: [CommonModule, ReactiveFormsModule, ProfileRoutingModule, FormsModule, SharedModule],
   exports: [
     ProfilePageComponent,
     ProfileDetailComponent,
