@@ -18,7 +18,7 @@
     --theme-footer-bg: #ffffff;
     --theme-border: #e2e8f0;
 
-    --bs-hover: #1b3975;
+    --bs-hover: #0d6efd;
     --theme-card-bg: #ffffff;
     --theme-card-border: #e2e8f0;
     --theme-navbar-fg: #111827;
@@ -45,7 +45,7 @@
     --theme-footer-bg: #0f131f;
     --theme-border: #1b2133;
 
-    --bs-hover: #1b3975;
+    --bs-hover: #0d6efd;
     --theme-card-bg: #0f131f;
     --theme-card-border: #1b2133;
     --theme-navbar-fg: #f9fafb;
@@ -54,14 +54,6 @@
     --theme-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.92%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 
     --theme-close-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath stroke='rgba%28255,255,255,0.92%29' stroke-linecap='round' stroke-width='2' d='M2 2l12 12M14 2L2 14'/%3e%3c/svg%3e");
-}
-
-.dropdown-item {
-
-    &:hover,
-    &:focus {
-        color: var(--bs-primary);
-    }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -77,10 +69,10 @@
         --bs-body-color: #ffffff;
 
         --theme-navbar-bg: #0f131f;
-        --theme-footer-bg: #0f131f;
+        --theme-footer-bg: #080808;
         --theme-border: #1b2133;
 
-        --bs-hover: #1b3975;
+        --bs-hover: #0d6efd;
         --theme-card-bg: #0f131f;
         --theme-card-border: #1b2133;
         --theme-navbar-fg: #f9fafb;

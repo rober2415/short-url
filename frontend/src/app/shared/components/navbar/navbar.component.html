@@ -52,7 +52,7 @@
                             <span class="d-lg-none ms-2" id="bd-theme-text">Toggle theme</span>
                         </button>
 
-                        <ul class="dropdown-menu dropdown-menu-end text-uppercase border-0 shadow rounded-0">
+                        <ul class="dropdown-menu dropdown-menu-end text-uppercase shadow">
                             <li>
                                 <button type="button" class="dropdown-item d-flex align-items-center gap-2"
                                     [class.active]="themeService.currentTheme === 'light'" (click)="setTheme('light')"
@@ -89,7 +89,7 @@
                     </button>
 
                     <ul
-                        class="dropdown-menu dropdown-menu-end text-uppercase border-0 shadow rounded-0 position-absolute">
+                        class="dropdown-menu dropdown-menu-end text-uppercase shadow position-absolute">
                         <ng-container *ngIf="authService.isAdmin$ | async">
                             <li>
                                 <a class="dropdown-item d-flex align-items-center gap-2" routerLink="/settings">
